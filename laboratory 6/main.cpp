@@ -1,40 +1,57 @@
-#include <SFML/Graphics.hpp>
+п»ї#include <SFML/Graphics.hpp>
 
 int main() {
-    // Создание окна
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Grid Example");
+    const int windowWidth = 500;
+    const int windowHeight = 500;
+    const int cellSize = 50;
+    const int numCols = 10;
+    const int numRows = 10;
 
-    // Размер ячейки
-    int cellSize = 50;
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Colored Cells");
+
+    sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
+    cell.setOutlineColor(sf::Color::Black);
+    cell.setOutlineThickness(1.f);
+
+    for (int row = 0; row < numRows; ++row) {
+        for (int col = 0; col < numCols; ++col) {
+            float x = col * cellSize;
+            float y = row * cellSize;
+            cell.setPosition(x, y);
+
+            if (col == 5 || row == 5) { 
+                cell.setFillColor(sf::Color::Green);
+            }
+            else {
+                cell.setFillColor(sf::Color::White);
+            }
+            window.draw(cell);
+        }
+    }
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
-        }
-
-        window.clear();
-
-        // Рисование сетки и закрашивание ячеек
-        for (int row = 0; row < 10; ++row) {
-            for (int col = 0; col < 10; ++col) {
-                sf::RectangleShape rectangle(sf::Vector2f(cellSize, cellSize));
-                rectangle.setPosition(col * cellSize, row * cellSize);
-                rectangle.setOutlineThickness(1);
-                rectangle.setOutlineColor(sf::Color::Black);
-
-                if (row == 4 || col == 4) {
-                    rectangle.setFillColor(sf::Color::Green);
-                }
-                else {
-                    rectangle.setFillColor(sf::Color::White);
-                }
-
-                window.draw(rectangle);
             }
         }
 
+        window.clear();
+        for (int row = 0; row < numRows; ++row) {
+            for (int col = 0; col < numCols; ++col) {
+                float x = col * cellSize;
+                float y = row * cellSize;
+                cell.setPosition(x, y);
+                if (col == 5 || row == 5) {
+                    cell.setFillColor(sf::Color::Green);
+                }
+                else {
+                    cell.setFillColor(sf::Color::White);
+                }
+                window.draw(cell);
+            }
+        }
         window.display();
     }
 
